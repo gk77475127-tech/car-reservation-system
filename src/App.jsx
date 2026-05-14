@@ -7,6 +7,17 @@ const CARS = [
   { id: 4, name: "레이",        plate: "125라7077", type: "경차", seats: 4, color: "#d97706" },
 ];
 
+function CarLabel({ car, size = "md" }) {
+  const big = size === "lg" ? 17 : 14;
+  const small = size === "lg" ? 12 : 11;
+  return (
+    <div>
+      <div style={{fontWeight:800, fontSize:big, color:"#111827", letterSpacing:"0.04em"}}>{car.plate}</div>
+      <div style={{fontSize:small, color:"#9ca3af", marginTop:1}}>{car.name} · {car.type} · {car.seats}인승</div>
+    </div>
+  );
+}
+
 const ME = { name: "홍길동", dept: "개발팀" };
 const WEEK_DAYS = ["월","화","수","목","금","토","일"];
 const HOURS = Array.from({ length: 11 }, (_, i) => i + 8);
@@ -235,8 +246,7 @@ export default function App() {
           <div style={{width:36,height:36,borderRadius:10,background:"rgba(255,255,255,0.18)",
             display:"flex",alignItems:"center",justifyContent:"center",fontSize:20}}>🚗</div>
           <div>
-            <div style={{fontWeight:800,fontSize:17,color:"#fff"}}>법인차량 예약</div>
-            <div style={{fontSize:11,color:"rgba(255,255,255,0.6)",marginTop:1}}>{ME.dept} · {ME.name}</div>
+            <div style={{fontWeight:800,fontSize:17,color:"#fff"}}>법인차량 예약시스템</div>
           </div>
         </div>
       </div>
@@ -292,8 +302,8 @@ export default function App() {
                     style={{padding:"13px 16px 10px",display:"flex",alignItems:"center",gap:12,cursor:"pointer"}}>
                     <div style={{width:9,height:9,borderRadius:"50%",background:car.color,flexShrink:0}}/>
                     <div style={{flex:1}}>
-                      <div style={{fontWeight:700,fontSize:14,color:"#111827",display:"flex",alignItems:"center",gap:6}}>
-                        {car.name}
+                      <div style={{display:"flex",alignItems:"center",gap:6}}>
+                        <div style={{fontWeight:800,fontSize:15,color:"#111827",letterSpacing:"0.04em"}}>{car.plate}</div>
                         {isHoliday && (
                           <span style={{fontSize:10,fontWeight:700,background:"#fed7aa",color:"#9a3412",
                             padding:"2px 7px",borderRadius:20}}>휴무</span>
@@ -304,7 +314,7 @@ export default function App() {
                             padding:"2px 7px",borderRadius:20}}>{blocks.length}건</span>
                         )}
                       </div>
-                      <div style={{fontSize:11,color:"#9ca3af",marginTop:1}}>{car.plate} · {car.type} · {car.seats}인승</div>
+                      <div style={{fontSize:11,color:"#9ca3af",marginTop:1}}>{car.name} · {car.type} · {car.seats}인승</div>
                     </div>
                     <div style={{display:"flex",alignItems:"center",gap:8}}>
                       {isHoliday ? (
@@ -529,8 +539,8 @@ export default function App() {
               <div style={{padding:"14px 16px"}}>
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
                   <div>
-                    <div style={{fontWeight:700,fontSize:15,color:"#111827"}}>{car.name}</div>
-                    <div style={{fontSize:11,color:"#9ca3af",marginTop:2}}>{car.plate}</div>
+                    <div style={{fontWeight:800,fontSize:15,color:"#111827",letterSpacing:"0.04em"}}>{car.plate}</div>
+                    <div style={{fontSize:11,color:"#9ca3af",marginTop:2}}>{car.name}</div>
                   </div>
                   <span style={{fontSize:12,fontWeight:700,color:car.color,
                     background:car.color+"14",padding:"4px 10px",borderRadius:20}}>
@@ -575,7 +585,7 @@ export default function App() {
                   <option value="">차량을 선택하세요</option>
                   {CARS.map(c=>(
                     <option key={c.id} value={c.id}>
-                      {c.name} ({c.plate})
+                      {c.plate} ({c.name})
                     </option>
                   ))}
                 </select>
@@ -687,7 +697,7 @@ export default function App() {
               <option value="">차량을 선택하세요</option>
               {CARS.map(c=>{
                 const isH=isCarHoliday(c.id,form.date);
-                return <option key={c.id} value={c.id}>{c.name} ({c.type}){isH?" — 휴무":""}</option>;
+                return <option key={c.id} value={c.id}>{c.plate} ({c.name}){isH?" — 휴무":""}</option>;
               })}
             </select>
           </Fl>
@@ -742,8 +752,8 @@ export default function App() {
                 <div style={{width:48,height:48,borderRadius:14,background:car.color+"18",
                   display:"flex",alignItems:"center",justifyContent:"center",fontSize:26}}>🚗</div>
                 <div style={{flex:1}}>
-                  <div style={{fontWeight:700,fontSize:15,color:"#111827"}}>{car.name}</div>
-                  <div style={{fontSize:12,color:"#9ca3af",marginTop:2}}>{car.plate} · {car.type} · {car.seats}인승</div>
+                  <div style={{fontWeight:800,fontSize:16,color:"#111827",letterSpacing:"0.04em"}}>{car.plate}</div>
+                  <div style={{fontSize:12,color:"#9ca3af",marginTop:2}}>{car.name} · {car.type} · {car.seats}인승</div>
                 </div>
                 {isHoliday
                   ? <span style={{fontSize:12,fontWeight:700,background:"#fed7aa",color:"#9a3412",
