@@ -49,23 +49,8 @@ function monthLabel(anchor) {
   const d=new Date(anchor); return `${d.getFullYear()}년 ${d.getMonth()+1}월`;
 }
 
-const SAMPLE_RES = [
-  { id:1,  carId:1, user:"김철수", dept:"영업팀",   date:"2026-05-18", start:9,  end:12, purpose:"거래처 방문" },
-  { id:2,  carId:2, user:"이영희", dept:"총무팀",   date:"2026-05-18", start:14, end:17, purpose:"공항 픽업"   },
-  { id:3,  carId:1, user:"박민준", dept:"마케팅팀", date:"2026-05-19", start:10, end:16, purpose:"전시회 참관" },
-  { id:4,  carId:3, user:"최수진", dept:"인사팀",   date:"2026-05-20", start:8,  end:11, purpose:"본사 출장"   },
-  { id:5,  carId:4, user:"정태양", dept:"물류팀",   date:"2026-05-21", start:9,  end:18, purpose:"배송 지원"   },
-  { id:6,  carId:2, user:"홍길동", dept:"개발팀",   date:"2026-05-22", start:13, end:15, purpose:"팀 워크숍"   },
-  { id:7,  carId:1, user:"홍길동", dept:"개발팀",   date:"2026-05-12", start:9,  end:11, purpose:"고객 미팅"   },
-  { id:8,  carId:3, user:"이영희", dept:"총무팀",   date:"2026-05-07", start:10, end:12, purpose:"서류 수거"   },
-  { id:9,  carId:2, user:"박민준", dept:"마케팅팀", date:"2026-05-26", start:14, end:17, purpose:"촬영 지원"   },
-  { id:10, carId:4, user:"김철수", dept:"영업팀",   date:"2026-05-28", start:9,  end:13, purpose:"물류 지원"   },
-];
-
-const SAMPLE_HOLIDAYS = [
-  { id:"h1", carId:3, date:"2026-05-20" },
-  { id:"h2", carId:4, date:"2026-05-23" },
-];
+const SAMPLE_RES = [];
+const SAMPLE_HOLIDAYS = [];
 
 function hasConflict(reservations, carId, date, start, end, excludeId=null) {
   return reservations
@@ -89,7 +74,7 @@ function Sheet({ open, onClose, title, children, cta, onCta, ctaColor="#2563eb",
   return (
     <div style={{position:"fixed",inset:0,zIndex:300,display:"flex",alignItems:"flex-end"}}>
       <div onClick={onClose} style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.45)"}}/>
-      <div style={{position:"relative",width:"100%",maxWidth:520,margin:"0 auto",
+      <div style={{position:"relative",width:"100%",maxWidth:600,margin:"0 auto",
         background:"#fff",borderRadius:"20px 20px 0 0",maxHeight:"92vh",
         display:"flex",flexDirection:"column",animation:"su .22s ease"}}>
         <style>{`@keyframes su{from{transform:translateY(60px);opacity:0}to{transform:none;opacity:1}}`}</style>
@@ -133,7 +118,7 @@ const inp = {
 
 /* ════════════ 메인 ════════════ */
 export default function App() {
-  const TODAY = "2026-05-18";
+  const TODAY = fmt(new Date());
 
   const [tab, setTab]           = useState("calendar");
   const [view, setView]         = useState("day");
@@ -238,7 +223,7 @@ export default function App() {
 
   return (
     <div style={{fontFamily:"'Noto Sans KR',-apple-system,sans-serif",background:"#f1f5f9",
-      minHeight:"100vh",maxWidth:520,margin:"0 auto",paddingBottom:72}}>
+      minHeight:"100vh",paddingBottom:72}}>
 
       {/* 헤더 */}
       <div style={{background:"#1e40af",padding:"14px 20px 12px"}}>
@@ -262,7 +247,7 @@ export default function App() {
         </div>
       )}
 
-      <div style={{padding:"12px 16px 0"}}>
+      <div style={{padding:"16px 24px 0",maxWidth:1200,margin:"0 auto"}}>
 
         {/* ══ 예약 현황 탭 ══ */}
         {tab==="calendar" && (<>
@@ -291,6 +276,7 @@ export default function App() {
                 🔧 {holidayCarsOnDate(selDate).map(cid=>CAR(cid)?.name).join(", ")} — 휴무일
               </div>
             )}
+            <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:14}}>
             {CARS.map(car=>{
               const blocks    = dayRes.filter(r=>r.carId===car.id);
               const isHoliday = isCarHoliday(car.id, selDate);
@@ -357,6 +343,7 @@ export default function App() {
                 </div>
               );
             })}
+            </div>
             <button onClick={()=>{setForm({carId:"",date:selDate,start:9,end:10,purpose:""});setShowForm(true);}}
               style={{position:"fixed",bottom:84,right:20,zIndex:200,
                 width:56,height:56,borderRadius:"50%",background:"#2563eb",color:"#fff",
@@ -674,7 +661,7 @@ export default function App() {
 
       {/* 하단 탭바 */}
       <div style={{position:"fixed",bottom:0,left:"50%",transform:"translateX(-50%)",
-        width:"100%",maxWidth:520,background:"#fff",borderTop:"1px solid #e5e7eb",
+        width:"100%",background:"#fff",borderTop:"1px solid #e5e7eb",
         display:"flex",zIndex:200}}>
         {[
           {id:"calendar",emoji:"📅",label:"예약 현황"},
